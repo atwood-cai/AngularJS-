@@ -1,4 +1,3 @@
-标签: 翻译
 ## [AngularJS 内幕详解（译文）](http://www.smashingmagazine.com/2015/01/angularjs-internals-in-depth/)
 
 *   原文作者： [Nicolas Bevacqua](http://www.smashingmagazine.com/author/nicolasbevacqua/)
@@ -24,7 +23,7 @@
 
 （免责声明：这篇文字是基于 [AngularJS version 1.3.0](https://github.com/angular/angular.js/tree/v1.3.0)）
 
-AngularJS 用scopes分离指令和DOM的通信。scopes也存在于controller层。scopes 是普通的JavaScript对象，AngularJS没有过多的操作。只是添加了“一串”带有一个或两个\$符号前缀的内部属性。其中以$$开头的常常不是必须的，经常用它们作代码气味，可以避免更深入的理解digest循环。
+AngularJS 用scopes分离指令和DOM的通信。scopes也存在于controller层。scopes 是普通的JavaScript对象，AngularJS没有过多的操作。只是添加了“一串”带有一个或两个$符号前缀的内部属性。其中以$$开头的常常不是必须的，经常用它们作代码气味，可以避免更深入的理解digest循环。
 
 ### 哪种scope是我们要讨论的？[Link](#what-kind-of-scopes-are-we-talking-about)
 
@@ -103,7 +102,7 @@ function nuts (peanut) {
 
 在介绍digest如何工作以及内部如何表现前，我会剖析scope的一些属性来介绍某些概念。我也会让你知道我如何获取这些属性。首先，打开 Chrome 并导航到我正在使用的一个 angular应用程序。然后，我将审查一个元素并打开开发者工具。
 
-（你知道[\$0能让你获得最后一个选中的元素](https://developers.google.com/chrome-developer-tools/docs/commandline-api#0_-_4)吗？\$1让你能访问前一个被选中的元素等。我想你会经常用到$0，尤其是使用 AngularJS工作时。）
+（你知道[$0能让你获得最后一个选中的元素](https://developers.google.com/chrome-developer-tools/docs/commandline-api#0_-_4)吗？$1让你能访问前一个被选中的元素等。我想你会经常用到$0，尤其是使用 AngularJS工作时。）
 
 对于每一个DOM元素， 用 angular.element 包装跟使用[jQuery](http://jquery.com/) 或 jqLite, jQuery 的 [迷你版](https://github.com/angular/angular.js/blob/caed2dfe4feeac5d19ecea2dbb1456b7fde21e6d/src/jqLite.js)是一样的。 一旦被包装， 你通过 scope() 函数得到的结果 —— 你猜对了！—— 就是跟元素关联的 AngularJS scope。结合$0,我发现自己经常使用下面的命令。
 
@@ -134,7 +133,7 @@ scope 的唯一标识
 *   [$root](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L131)
 根scope
 
-*    [\$parent](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L217)
+*    [$parent](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L217)
 父级scope， 如果 scope == scope.$root 则为 null
 
 *   [$$childHead](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L223)
@@ -161,7 +160,7 @@ scope 的唯一标识
 *   [$on(evt, fn)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L1089-L1109)[22](#22)
 注册一个名为evt，监听器为fn的事件。
 
-*   [\$emit(evt, args)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L1134-L1182)[23](#23)
+*   [$emit(evt, args)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L1134-L1182)[23](#23)
 发送事件 evt， 在scope 链上冒泡，在当前scope 以及所有的 $parents 上触发，包括 $rootScope。
 
 *   [$broadcast(evt, args)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L1206-L1258)[24](#24)
@@ -271,7 +270,7 @@ angular.module('PonyDeli').controller('deliveryCtrl', function ($scope) {
 
 渐渐的，你将对事件和服务越来越熟悉。我想告诉你，当你期望视图模块改变来响应事件，你应该使用 event， 当你不期望视图模块改变，你应该使用 service。有时候响应是这两种的混合：一个动作触发了一个事件，事件调用了一个 service， 或者 service 从 $rootScope广播了一个事件。这视情况而定，并且你应该这样分析，而不是随意使用一个方法。
 
-如果你有两个组件通过 \$rootScope 通信，你可能更喜欢使用 \$rootScope.$emit （而不是 $broadcast）和 \$rootScope.\$on。这种方式下， 事件只会在 \$rootScope.$$listeners 之间传播， 那些你知道没有该事件的监听器的后代的 $rootScope上，不会循环浪费时间。
+如果你有两个组件通过 $rootScope 通信，你可能更喜欢使用 $rootScope.$emit （而不是 $broadcast）和 $rootScope.$on。这种方式下， 事件只会在 $rootScope.$$listeners 之间传播， 那些你知道没有该事件的监听器的后代的 $rootScope上，不会循环浪费时间。
 
 ```
 angular.module('PonyDeli').factory("notificationService", function ($rootScope) {
@@ -308,29 +307,29 @@ angular.module('PonyDeli').factory("notificationService", function ($rootScope) 
 了解这个恐怖的过程是认识 AngularJS的关键。
 
 
-AngularJS 基于它的数据绑定的特性，通过循环脏检测来追踪变化并且在变化时触发事件。这比听起来简单。事实上， 它就是这样简单。让我们快速的浏览一下 \$digest 循环的核心组件。 首先，有一个 scope.$digest 方法，通过递归检测scope 和它的后代们的变化。
+AngularJS 基于它的数据绑定的特性，通过循环脏检测来追踪变化并且在变化时触发事件。这比听起来简单。事实上， 它就是这样简单。让我们快速的浏览一下 $digest 循环的核心组件。 首先，有一个 scope.$digest 方法，通过递归检测scope 和它的后代们的变化。
 
-1.  [\$digest()](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L710)    
+1.  [$digest()](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L710)    
 执行 $digest 循环脏检测
 
 2.  [$$phase](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L1271)
-digest 循环的当前阶段， [null, '\$apply', '$digest'] 中的一个。
+digest 循环的当前阶段， [null, '$apply', '$digest'] 中的一个。
 
 
 你需要小心触发 digest，因为当你已经在一个 digest 阶段而尝试这么做， 会因为一些无法解释的现象导致 AngularJS 出错。
 
 让我们看看 [文档](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest)里关于 $digest怎么说
 
-> Processes all of the [watchers](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch) of the current scope and its children. Because a [watcher](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch)’s listener can change the model, the [\$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest) keeps calling the [watchers](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch) until no more listeners are firing. This means that it is possible to get into an infinite loop. This function will throw 'Maximum iteration limit exceeded.' if the number of iterations exceeds 10.
+> Processes all of the [watchers](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch) of the current scope and its children. Because a [watcher](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch)’s listener can change the model, the [$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest) keeps calling the [watchers](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch) until no more listeners are firing. This means that it is possible to get into an infinite loop. This function will throw 'Maximum iteration limit exceeded.' if the number of iterations exceeds 10.
 > 
-> Usually, you don’t call [\$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest) directly in [controllers](http://docs.angularjs.org/api/ng.directive:ngController) or in [directives](http://docs.angularjs.org/api/ng.$compileProvider#methods_directive). Instead, you should call [\$apply()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$apply) (typically from within a [directives](http://docs.angularjs.org/api/ng.$compileProvider#methods_directive)), which will force a [$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest).
+> Usually, you don’t call [$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest) directly in [controllers](http://docs.angularjs.org/api/ng.directive:ngController) or in [directives](http://docs.angularjs.org/api/ng.$compileProvider#methods_directive). Instead, you should call [$apply()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$apply) (typically from within a [directives](http://docs.angularjs.org/api/ng.$compileProvider#methods_directive)), which will force a [$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest).
 
 
 ----------
 
-> 它处理当前scope 及其 后代们的所有的 [watchers](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch)。因为 watcher 的监听器可以改变 model，[\$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest) 持续调用 watcher 直到没有监听器被触发。这意味着可能进入死循环。如果迭代超过10次，这个函数会抛出异常 'Maximum iteration limit exceeded'。
+> 它处理当前scope 及其 后代们的所有的 [watchers](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch)。因为 watcher 的监听器可以改变 model，[$digest()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$digest) 持续调用 watcher 直到没有监听器被触发。这意味着可能进入死循环。如果迭代超过10次，这个函数会抛出异常 'Maximum iteration limit exceeded'。
 >
-> 通常，我们在控制器或指令中不直接调用 \$digest。相反，你应该调用[\$apply()](http://docs.angularjs.org/api/ng.\$rootScope.Scope#methods_\$apply) (通常在一个指令里) 用来强制执行一个 $digest()。
+> 通常，我们在控制器或指令中不直接调用 $digest。相反，你应该调用[$apply()](http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$apply) (通常在一个指令里) 用来强制执行一个 $digest()。
 
 
 所以，一个 $digest 处理所有的 watcher，处理这些 watcher时，这些watcher触发，直到没有别的触发 watcher。为了我们理解这个循环，仍然有两个问题需要解答。
@@ -342,7 +341,7 @@ digest 循环的当前阶段， [null, '\$apply', '$digest'] 中的一个。
 这两个问题的答案因复杂度差异很大，但是我会尽量为你解释清楚。我将介绍 watcher，让你有个自己的看法。
 
 
-如果你读过这一步，你或许已经知道什么事 watcher了。你或许使用过 [scope.\$watch](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L356)，甚至用过[scope.$watchCollection](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L530)。$$watchers 属性有用 scope 上所有的 watcher。
+如果你读过这一步，你或许已经知道什么事 watcher了。你或许使用过 [scope.$watch](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L356)，甚至用过[scope.$watchCollection](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L530)。$$watchers 属性有用 scope 上所有的 watcher。
 
 *   [$watch(watchExp, listener, objectEquality)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L356)
 为scope添加一个 watch 监听器
@@ -395,7 +394,7 @@ setTimeout(function () {
 
 ```
 
-我放置了一个[没有 \$digest 的例子](http://codepen.io/bevacqua/pen/lLbtI)在 CodePen，以及 timeout[有 \$digest](http://codepen.io/bevacqua/pen/vwDoz)的。你可以用[\$timeout service](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/timeout.js#L35) 替换 setTimeout，它提供了一些错误处理，并且会执行 $apply()。
+我放置了一个[没有 $digest 的例子](http://codepen.io/bevacqua/pen/lLbtI)在 CodePen，以及 timeout[有 $digest](http://codepen.io/bevacqua/pen/vwDoz)的。你可以用[$timeout service](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/timeout.js#L35) 替换 setTimeout，它提供了一些错误处理，并且会执行 $apply()。
 
 ```
 $timeout(function () {
@@ -404,24 +403,24 @@ $timeout(function () {
 
 ```
 
-*   [\$apply(expr)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L1018-L1033)
+*   [$apply(expr)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L1018-L1033)
 解析和计算一个表达式，然后在 $rootScope 上执行 $digest 循环
 
 
-为了在每个 scope 上执行 digest， \$apply 提供了很好的错误处理功能。如果你尝试调优性能， 使用 \$digest 或许能够保证， 但是在我了解 AngularJS 内部工作原理而感觉良好之前， 我会远离它。实际上很少时候需要手动调用 \$digest()；$apply 总是更好的选择。 
+为了在每个 scope 上执行 digest， $apply 提供了很好的错误处理功能。如果你尝试调优性能， 使用 $digest 或许能够保证， 但是在我了解 AngularJS 内部工作原理而感觉良好之前， 我会远离它。实际上很少时候需要手动调用 $digest()；$apply 总是更好的选择。 
 
 现在我们回到第二个问题上来。
  
 *   什么触发了 $digest？！
 
 
-Digest的内部触发在AngularJS代码库中具有重要地位。它们的要么直接被触发，要么是调用 \$apply() 触发，就像我们在 $timeout 服务里看到的。不管是AngularJS中的核心还是边缘的指令都会触发digest。 digest 触发你的 watcher， watcher更新你的 UI。这是基本的思路。
+Digest的内部触发在AngularJS代码库中具有重要地位。它们的要么直接被触发，要么是调用 $apply() 触发，就像我们在 $timeout 服务里看到的。不管是AngularJS中的核心还是边缘的指令都会触发digest。 digest 触发你的 watcher， watcher更新你的 UI。这是基本的思路。
 
 
 你可以从 AngularJS wiki里面找到关于好的实践资源，链接在文章底部。
 
 
-我已经解释了 watcher 和 \$digest 循环如何相互交互。下面，我将列出一些与 $digest 循环相关的属性，它们可以在 scope 上找到。 这些可以帮助你在 AngularJS 编译时解析文本表达式， 或者在 digest 循环的不同阶段执行一小段代码。
+我已经解释了 watcher 和 $digest 循环如何相互交互。下面，我将列出一些与 $digest 循环相关的属性，它们可以在 scope 上找到。 这些可以帮助你在 AngularJS 编译时解析文本表达式， 或者在 digest 循环的不同阶段执行一小段代码。
 
 *   [$eval(expression, locals)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L922-L924)
 立刻解析和计算出一个 scope 表达式。
@@ -435,7 +434,7 @@ Digest的内部触发在AngularJS代码库中具有重要地位。它们的要�
 *   [$$postDigest(fn)](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L969-L971)
 在下一个 digest 周期后执行 fn
 
-*   [\$\$postDigestQueue](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L970)
+*   [$$postDigestQueue](https://github.com/angular/angular.js/blob/v1.3.0/src/ng/rootScope.js#L970)
 用 $$postDigest(fn) 注册方法
 <br>
 #### scope已死！scope万岁！(The Scope Is Dead! Long Live the Scope!) [Link](#the-scope-is-dead-long-live-the-scope)
