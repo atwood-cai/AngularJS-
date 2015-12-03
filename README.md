@@ -17,7 +17,7 @@
 
 如果这个图表看起来非常的费解，那么这篇文章很适合你。
 
-[![01-mindbender](https://media-mediatemple.netdna-ssl.com/wp-content/uploads/2014/11/01-mindbender.png)](https://github.com/angular/angular.js/wiki/Understanding-Scopes)
+[![01-mindbender](http://p0.qhimg.com/d/inn/794b8339/01-mindbender.png)](https://github.com/angular/angular.js/wiki/Understanding-Scopes)
 
 ([Image credit](https://github.com/angular/angular.js/wiki/Understanding-Scopes)[3](#3)) ([View large version]()[4](#4))
 
